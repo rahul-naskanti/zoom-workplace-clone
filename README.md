@@ -137,7 +137,7 @@ scaler final/
 ### 1. Backend Setup
 
 ```bash
-cd "scaler final/backend"
+cd "scalerfinal/backend"
 pip install -r requirements.txt
 python3 -m uvicorn src.main:app --host 127.0.0.1 --port 8000 --reload
 ```
@@ -150,7 +150,7 @@ Verify: `http://127.0.0.1:8000/health` should return:
 ### 2. Frontend Setup
 
 ```bash
-cd "scaler final/frontend"
+cd "scalerfinal/frontend"
 npm install
 npm run dev
 ```
