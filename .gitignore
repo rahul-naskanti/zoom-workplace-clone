@@ -1,0 +1,18 @@
+# python
+__pycache__/
+*.pyc
+venv/
+*.db
+backend/zoom_clone.db
+
+# node
+node_modules/
+.next/
+out/
+build/
+
+# system
+.DS_Store
+.env
+.env*
+.vercel
