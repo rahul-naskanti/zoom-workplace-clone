@@ -167,14 +167,6 @@ export default function Topbar(){
 
           <div className="border-t border-[#EDEEF1] my-2" />
 
-          {/* Settings */}
-          <button className="flex items-center gap-2.5 px-3 py-1.5 hover:bg-gray-100/70 rounded-lg text-left w-full transition text-gray-700">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-            Settings
-          </button>
-
-          <div className="border-t border-[#EDEEF1] my-2" />
-
           {/* Status Selection list */}
           <div className="space-y-0.5">
             {[
@@ -205,19 +197,6 @@ export default function Topbar(){
             My Profile
           </button>
 
-          <button className="flex items-center justify-between px-3 py-1.5 hover:bg-gray-100/70 rounded-lg text-left w-full transition text-gray-700">
-            About
-          </button>
-
-          <button className="flex items-center justify-between px-3 py-1.5 hover:bg-gray-100/70 rounded-lg text-left w-full transition text-gray-700">
-            Help
-          </button>
-
-          <button className="flex items-center justify-between px-3 py-1.5 hover:bg-gray-100/70 rounded-lg text-left w-full transition text-gray-700">
-            <span>Language</span>
-            <span className="text-[11.5px] text-gray-400">English</span>
-          </button>
-
           <div className="border-t border-[#EDEEF1] my-2" />
 
           {/* Sign Out */}
@@ -226,13 +205,6 @@ export default function Topbar(){
             className="flex items-center justify-between px-3 py-1.5 hover:bg-gray-100/70 rounded-lg text-left w-full transition text-[#FF2D55] font-semibold"
           >
             Sign Out
-          </button>
-
-          <div className="border-t border-[#EDEEF1] my-2" />
-
-          <button className="flex items-center gap-2 px-3 py-1.5 hover:bg-gray-100/70 rounded-lg text-left w-full transition text-[#0B5CFF] font-medium">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download the Zoom app
           </button>
 
         </div>
