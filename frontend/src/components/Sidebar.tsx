@@ -19,33 +19,59 @@ export default function Sidebar({ activeTab = 'Home', onTabChange }: { activeTab
   }
 
   return (
-    <aside className="w-[68px] shrink-0 flex flex-col justify-between h-full py-4">
-      <div className="flex flex-col gap-1">
+    <>
+      {/* DESKTOP SIDEBAR - Hidden on mobile/tablet */}
+      <aside className="hidden md:flex w-[68px] shrink-0 flex-col justify-between h-full py-4 bg-[#E5E8EC]">
+        <div className="flex flex-col gap-1">
+          {items.map(item => {
+            const isActive = activeTab === item.label
+            return (
+              <button
+                key={item.label}
+                onClick={() => handleClick(item)}
+                className={`w-[46px] h-[46px] mx-auto flex flex-col items-center justify-center rounded-[10px] gap-0.5 transition-all duration-150 ${
+                  isActive
+                    ? 'bg-white text-black shadow-[0_1px_3px_rgba(0,0,0,0.08)] font-medium'
+                    : 'text-[#5E6673] hover:bg-[#E1E4E8]/60'
+                }`}
+              >
+                {item.label === 'Home' ? (
+                  <IconHome size={17} filled={isActive} />
+                ) : (
+                  <item.icon size={17} />
+                )}
+                <span className="text-[10px] tracking-wide">{item.label}</span>
+              </button>
+            )
+          })}
+        </div>
+        <button className="mx-auto w-[32px] h-[32px] flex items-center justify-center text-[#5E6673]">
+          <IconSettings size={16} />
+        </button>
+      </aside>
+
+      {/* MOBILE BOTTOM NAVIGATION BAR - Visible only on mobile/tablet */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[56px] bg-white border-t border-[#EDEEF1] flex justify-around items-center z-40 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
         {items.map(item => {
           const isActive = activeTab === item.label
           return (
             <button
               key={item.label}
               onClick={() => handleClick(item)}
-              className={`w-[52px] h-[52px] mx-auto flex flex-col items-center justify-center rounded-[12px] gap-0.5 transition-all duration-150 ${
-                isActive
-                  ? 'bg-white text-black shadow-[0_1px_3px_rgba(0,0,0,0.08)] font-medium'
-                  : 'text-[#5E6673] hover:bg-[#E1E4E8]/60'
+              className={`flex flex-col items-center justify-center px-3 py-1.5 gap-0.5 rounded-lg transition ${
+                isActive ? 'text-[#0B5CFF] font-semibold' : 'text-[#5E6673]'
               }`}
             >
               {item.label === 'Home' ? (
-                <IconHome size={20} filled={isActive} />
+                <IconHome size={18} filled={isActive} />
               ) : (
-                <item.icon size={20} />
+                <item.icon size={18} />
               )}
-              <span className="text-[11px] tracking-wide">{item.label}</span>
+              <span className="text-[9px] tracking-tight">{item.label}</span>
             </button>
-          )
+          );
         })}
-      </div>
-      <button className="mx-auto w-[32px] h-[32px] flex items-center justify-center text-[#5E6673]">
-        <IconSettings size={18} />
-      </button>
-    </aside>
+      </nav>
+    </>
   )
 }

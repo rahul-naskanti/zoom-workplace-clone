@@ -1,5 +1,6 @@
 "use client"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Topbar from '../../components/Topbar'
 import Sidebar from '../../components/Sidebar'
 import {
@@ -20,10 +21,24 @@ import {
 } from '../../components/ZoomIcons'
 
 export default function ChatPage() {
+  const router = useRouter()
   const [activeFilter, setActiveFilter] = useState('All')
   const [selectedChat, setSelectedChat] = useState<string | null>('self') // Default selected to Naskanti Rahul (You)
   const [messages, setMessages] = useState<any[]>([])
   const [chatInput, setChatInput] = useState('')
+  const [showFeatureModal, setShowFeatureModal] = useState(true)
+  const [authorized, setAuthorized] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    const userStr = localStorage.getItem('user')
+    if (!userStr) {
+      router.push('/login')
+      return
+    }
+    setAuthorized(true)
+  }, [])
   
   // Collapse/Expand section states
   const [starredOpen, setStarredOpen] = useState(false)
@@ -66,6 +81,10 @@ export default function ChatPage() {
         time: new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
       }])
     }, 1200)
+  }
+
+  if (!mounted || !authorized) {
+    return <div className="h-screen bg-[#F0F2F5]"></div>
   }
 
   return (
@@ -403,6 +422,48 @@ export default function ChatPage() {
           </div>
         </main>
       </div>
+
+      {/* Feature Not Implemented Modal Popup */}
+      {showFeatureModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-fade-in">
+          <div className="bg-white rounded-[16px] p-8 shadow-2xl max-w-sm w-[90%] text-center">
+            <div className="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-5 text-[#0B5CFF]">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+            </div>
+            <h2 className="text-[18px] font-bold text-[#1A1D1F] mb-2">Feature Not Implemented</h2>
+            <p className="text-[13.5px] text-[#6B7280] leading-relaxed mb-6">
+              The Team Chat messaging features are currently in development and have not been implemented.
+            </p>
+            <button
+              onClick={() => {
+                setShowFeatureModal(false)
+                router.push('/')
+              }}
+              style={{
+                backgroundColor: '#0B5CFF',
+                color: '#ffffff',
+                padding: '8px 24px',
+                borderRadius: '8px',
+                fontSize: '13.5px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: 'none',
+                width: '100%'
+              }}
+              className="hover:bg-[#004BE0] active:scale-[0.98] transition shadow-sm"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

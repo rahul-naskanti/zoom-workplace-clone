@@ -1,6 +1,6 @@
-// Zoom Nav Icons — Custom SVG icons matching the actual Zoom Workplace app
+// Zoom Nav Icons — Pixel-perfect SVG icons matching the actual Zoom Workplace sidebar
 
-// Home — outlined/filled house
+// Home — outlined house (inactive) / filled house (active)
 export function IconHome({ size = 22, filled = false }: { size?: number; filled?: boolean }) {
   if (filled) {
     return (
@@ -10,29 +10,33 @@ export function IconHome({ size = 22, filled = false }: { size?: number; filled?
     )
   }
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round">
-      <path d="M11.3861 3.41474C11.7472 3.09509 12.2528 3.09509 12.6139 3.41474L19.6139 9.61C19.8578 9.81 20 10.1 20 10.42V19.5C20 20.33 19.33 21 18.5 21H15.5C14.67 21 14 20.33 14 19.5V15.5C14 14.95 13.55 14.5 13 14.5H11C10.45 14.5 10 14.95 10 15.5V19.5C10 20.33 9.33 21 8.5 21H5.5C4.67 21 4 20.33 4 19.5V10.42C4 10.1 4.14 9.81 4.39 9.61L11.3861 3.41474Z"/>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round">
+      <path d="M3.5 10.25L12 3L20.5 10.25V19.5C20.5 20.33 19.83 21 19 21H15.5C14.67 21 14 20.33 14 19.5V15.5C14 14.95 13.55 14.5 13 14.5H11C10.45 14.5 10 14.95 10 15.5V19.5C10 20.33 9.33 21 8.5 21H5C4.17 21 3.5 20.33 3.5 19.5V10.25Z"/>
     </svg>
   )
 }
 
-// Meetings — camera/video with small square indicator
+// Meetings — video camera with small filled square indicator at top-right
 export function IconMeetings({ size = 22 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <rect x="2.5" y="6" width="13.5" height="12" rx="2.5" stroke="currentColor" strokeWidth="1.5"/>
-      <path d="M16 10.5L20.5 7.5V16.5L16 13.5V10.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-      <rect x="14.5" y="4" width="4" height="4" rx="1" fill="currentColor"/>
+      <rect x="2" y="6.5" width="14" height="11.5" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M16 10.5L21 7.5V16.5L16 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+      <rect x="15" y="3.5" width="4.5" height="4.5" rx="1.2" fill="currentColor"/>
     </svg>
   )
 }
 
-// Chat — overlapping speech bubbles
+// Chat — two overlapping speech bubbles with small dot
 export function IconChat({ size = 22 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <path d="M13.5 3.5H19C20.1 3.5 21 4.4 21 5.5V10.5C21 11.6 20.1 12.5 19 12.5H18V14.5L15.5 12.5H13.5" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" strokeLinecap="round"/>
-      <path d="M5 8.5H14C15.1 8.5 16 9.4 16 10.5V16C16 17.1 15.1 18 14 18H8.5L5.5 20.5V18H5C3.9 18 3 17.1 3 16V10.5C3 9.4 3.9 8.5 5 8.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+      {/* Back bubble */}
+      <path d="M13 4H19.5C20.6 4 21.5 4.9 21.5 6V11C21.5 12.1 20.6 13 19.5 13H18.5V15L16 13H13" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" strokeLinecap="round"/>
+      {/* Front bubble */}
+      <path d="M4.5 8.5H14C15.1 8.5 16 9.4 16 10.5V16C16 17.1 15.1 18 14 18H8.5L5.5 20.5V18H4.5C3.4 18 2.5 17.1 2.5 16V10.5C2.5 9.4 3.4 8.5 4.5 8.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+      {/* Small notification dot */}
+      <circle cx="19.5" cy="5" r="2" fill="currentColor" stroke="currentColor" strokeWidth="0"/>
     </svg>
   )
 }
@@ -41,9 +45,9 @@ export function IconChat({ size = 22 }: { size?: number }) {
 export function IconMore({ size = 22 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <circle cx="5.5" cy="12" r="1.8"/>
-      <circle cx="12" cy="12" r="1.8"/>
-      <circle cx="18.5" cy="12" r="1.8"/>
+      <circle cx="5.5" cy="12" r="1.6"/>
+      <circle cx="12" cy="12" r="1.6"/>
+      <circle cx="18.5" cy="12" r="1.6"/>
     </svg>
   )
 }

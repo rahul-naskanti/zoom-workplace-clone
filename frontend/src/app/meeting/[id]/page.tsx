@@ -1,6 +1,7 @@
 "use client"
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { validateMeeting } from '@/lib/api'
 import {
   ZoomMicIcon,
   ZoomVideoIcon,
@@ -52,6 +53,9 @@ export default function MeetingPage() {
   const [showWarn, setShowWarn] = useState(true)
   const [isSharing, setIsSharing] = useState(false)
 
+  // Meeting validation
+  const [isValid, setIsValid] = useState<boolean | null>(null)
+
   // Interaction Panels
   const [activePanel, setActivePanel] = useState<'none' | 'chat' | 'participants' | 'ai'>('none')
   const [showReactions, setShowReactions] = useState(false)
@@ -93,6 +97,26 @@ export default function MeetingPage() {
       idx === 0 ? { ...p, name: `${savedName} (Host, me)`, micOn, camOn } : p
     ))
   }, [micOn, camOn])
+
+  // Validate meeting ID on mount
+  useEffect(() => {
+    const code = id as string
+    // Check localStorage first
+    const stored = JSON.parse(localStorage.getItem('validMeetings') || '[]')
+    if (stored.includes(code)) {
+      setIsValid(true)
+      return
+    }
+    // Then check backend
+    validateMeeting(code).then(valid => {
+      if (valid) {
+        // Store for future use
+        stored.push(code)
+        localStorage.setItem('validMeetings', JSON.stringify(stored))
+      }
+      setIsValid(valid)
+    })
+  }, [id])
 
   // Initialize camera & microphone
   useEffect(() => {
@@ -149,6 +173,8 @@ export default function MeetingPage() {
           }
         }, 100)
         s.getVideoTracks()[0].onended = () => {
+          shareStreamRef.current?.getTracks().forEach(t => t.stop())
+          shareStreamRef.current = null
           setIsSharing(false)
         }
       } catch (err) {
@@ -156,6 +182,13 @@ export default function MeetingPage() {
       }
     }
   }
+
+  // Re-bind webcam stream when returning from screen share and element re-mounts
+  useEffect(() => {
+    if (!isSharing && streamRef.current && videoRef.current) {
+      videoRef.current.srcObject = streamRef.current
+    }
+  }, [isSharing, camOn])
 
   const handleSendChat = (e?: React.FormEvent) => {
     if (e) e.preventDefault()
@@ -217,6 +250,54 @@ export default function MeetingPage() {
     streamRef.current?.getTracks().forEach(t => t.stop())
     shareStreamRef.current?.getTracks().forEach(t => t.stop())
     router.push('/')
+  }
+
+  // Loading — checking if meeting is valid
+  if (isValid === null) {
+    return (
+      <div className="h-screen bg-[#1A1A2E] flex flex-col items-center justify-center">
+        <div className="w-10 h-10 border-4 border-[#0B5CFF] border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p className="text-white/70 text-[14px]">Validating meeting link...</p>
+      </div>
+    )
+  }
+
+  // Invalid meeting ID
+  if (isValid === false) {
+    return (
+      <div className="h-screen bg-[#1A1A2E] flex flex-col items-center justify-center">
+        <div className="bg-white rounded-[16px] p-10 shadow-2xl max-w-md text-center">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-5">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="#EF4444" strokeWidth="2"/>
+              <line x1="8" y1="8" x2="16" y2="16" stroke="#EF4444" strokeWidth="2" strokeLinecap="round"/>
+              <line x1="16" y1="8" x2="8" y2="16" stroke="#EF4444" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </div>
+          <h2 className="text-[22px] font-bold text-[#1A1D1F] mb-2">Invalid Meeting Link</h2>
+          <p className="text-[14px] text-[#6B7280] mb-6">
+            The meeting ID <span className="font-semibold text-[#1A1D1F]">{id}</span> does not exist or has expired.
+          </p>
+          <button
+            onClick={() => router.push('/')}
+            style={{
+              backgroundColor: '#0B5CFF',
+              color: '#ffffff',
+              padding: '10px 32px',
+              borderRadius: '9999px',
+              fontSize: '14px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            Go Home
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -325,7 +406,7 @@ export default function MeetingPage() {
 
         {/* SIDEBARS PANEL */}
         {activePanel !== 'none' && (
-          <div className="w-[320px] bg-white border-l border-[#DCDCE0] flex flex-col shrink-0 z-10">
+          <div className="absolute md:static inset-y-0 right-0 z-40 w-full sm:w-[320px] bg-white border-l border-[#DCDCE0] flex flex-col shrink-0">
             {/* Panel Header */}
             <div className="h-[48px] px-4 flex items-center justify-between border-b border-[#EDEEF1]">
               <span className="font-semibold text-black text-[14px]">
@@ -436,51 +517,51 @@ export default function MeetingPage() {
       </div>
 
       {/* BOTTOM TOOLBAR */}
-      <div className="h-[72px] bg-[#0A0A0A] flex items-center justify-between px-6 shrink-0 border-t border-white/5 z-20 relative">
+      <div className="h-[72px] bg-[#0A0A0A] flex items-center justify-between px-3 sm:px-6 shrink-0 border-t border-white/5 z-20 relative">
         {/* Left: Audio & Video */}
-        <div className="flex items-center gap-6">
-          <button onClick={toggleMic} className="flex flex-col items-center gap-1 min-w-[54px] group relative">
+        <div className="flex items-center gap-3 sm:gap-6">
+          <button onClick={toggleMic} className="flex flex-col items-center gap-1 min-w-[42px] sm:min-w-[54px] group relative">
             <div className="relative">
               <div className="w-8 h-8 rounded hover:bg-white/10 flex items-center justify-center transition">
-                <ZoomMicIcon size={24} className={micOn ? "text-white" : "text-[#FF2D55]"} micOn={micOn} />
+                <ZoomMicIcon size={22} className={micOn ? "text-white" : "text-[#FF2D55]"} micOn={micOn} />
               </div>
               <div className="absolute -top-1 -right-1.5 w-3.5 h-3.5 flex items-center justify-center">
                 <ZoomChevronUpIcon size={12} className="text-white opacity-60" />
               </div>
             </div>
-            <span className={`text-[11px] font-medium transition ${micOn ? 'text-white/80 group-hover:text-white' : 'text-[#FF2D55]'}`}>
+            <span className={`text-[10px] sm:text-[11px] font-medium transition hidden sm:inline ${micOn ? 'text-white/80 group-hover:text-white' : 'text-[#FF2D55]'}`}>
               {micOn ? 'Mute' : 'Unmute'}
             </span>
           </button>
 
-          <button onClick={toggleCam} className="flex flex-col items-center gap-1 min-w-[54px] group relative">
+          <button onClick={toggleCam} className="flex flex-col items-center gap-1 min-w-[42px] sm:min-w-[54px] group relative">
             <div className="relative">
               <div className="w-8 h-8 rounded hover:bg-white/10 flex items-center justify-center transition">
-                <ZoomVideoIcon size={28} className={camOn ? "text-white" : "text-[#FF2D55]"} camOn={camOn} />
+                <ZoomVideoIcon size={26} className={camOn ? "text-white" : "text-[#FF2D55]"} camOn={camOn} />
               </div>
               <div className="absolute -top-1 -right-1.5 w-3.5 h-3.5 flex items-center justify-center">
                 <ZoomChevronUpIcon size={12} className="text-white opacity-60" />
               </div>
             </div>
-            <span className={`text-[11px] font-medium transition ${camOn ? 'text-white/80 group-hover:text-white' : 'text-[#FF2D55]'}`}>
+            <span className={`text-[10px] sm:text-[11px] font-medium transition hidden sm:inline ${camOn ? 'text-white/80 group-hover:text-white' : 'text-[#FF2D55]'}`}>
               {camOn ? 'Stop Video' : 'Start Video'}
             </span>
           </button>
         </div>
 
         {/* Center: Main features */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3.5 sm:gap-6">
           {/* Security button */}
           <div className="relative">
             <button
               onClick={() => { setShowSecurity(!showSecurity); setShowReactions(false); }}
               className={`flex flex-col items-center gap-1 group transition ${showSecurity ? 'text-[#0B5CFF]' : 'text-white/80 hover:text-white'}`}
             >
-              <ZoomSecurityIcon size={22} />
-              <span className="text-[11px]">Security</span>
+              <ZoomSecurityIcon size={20} />
+              <span className="text-[10px] sm:text-[11px] hidden sm:inline">Security</span>
             </button>
             {showSecurity && (
-              <div className="absolute bottom-[64px] left-1/2 -translate-x-1/2 bg-[#1C1C1E] border border-white/10 rounded-[12px] p-3 w-[220px] shadow-2xl z-30 flex flex-col text-white text-[12px] gap-2.5">
+              <div className="absolute bottom-[64px] left-1/2 -translate-x-1/2 bg-[#1C1C1E] border border-white/10 rounded-[12px] p-3 w-[200px] sm:w-[220px] shadow-2xl z-30 flex flex-col text-white text-[12px] gap-2.5">
                 <div className="font-semibold text-white/60 pb-1.5 border-b border-white/5">Host Permissions</div>
                 <label className="flex items-center justify-between cursor-pointer">
                   <span>Lock Meeting</span>
@@ -508,8 +589,8 @@ export default function MeetingPage() {
             onClick={() => { setActivePanel(activePanel === 'participants' ? 'none' : 'participants'); setShowSecurity(false); setShowReactions(false); }}
             className={`flex flex-col items-center gap-1 group transition relative ${activePanel === 'participants' ? 'text-[#0B5CFF]' : 'text-white/80 hover:text-white'}`}
           >
-            <ZoomParticipantsIcon size={22} />
-            <span className="text-[11px]">Participants</span>
+            <ZoomParticipantsIcon size={20} />
+            <span className="text-[10px] sm:text-[11px] hidden sm:inline">Participants</span>
             <span className="absolute -top-1 -right-2 bg-[#FF5F15] text-white text-[9px] px-1 rounded-full font-bold">
               {participantsList.length}
             </span>
@@ -520,8 +601,8 @@ export default function MeetingPage() {
             onClick={() => { setActivePanel(activePanel === 'chat' ? 'none' : 'chat'); setShowSecurity(false); setShowReactions(false); }}
             className={`flex flex-col items-center gap-1 group transition relative ${activePanel === 'chat' ? 'text-[#0B5CFF]' : 'text-white/80 hover:text-white'}`}
           >
-            <ZoomChatIcon size={20} className="mt-0.5" />
-            <span className="text-[11px]">Chat</span>
+            <ZoomChatIcon size={18} className="mt-0.5" />
+            <span className="text-[10px] sm:text-[11px] hidden sm:inline">Chat</span>
           </button>
 
           {/* Share screen */}
@@ -529,8 +610,8 @@ export default function MeetingPage() {
             onClick={handleShareScreen}
             className={`flex flex-col items-center gap-1 group transition ${isSharing ? 'text-[#00FF91]' : 'text-white/80 hover:text-white'}`}
           >
-            <ZoomShareScreenIcon size={22} />
-            <span className="text-[11px]">Share</span>
+            <ZoomShareScreenIcon size={20} />
+            <span className="text-[10px] sm:text-[11px] hidden sm:inline">Share</span>
           </button>
 
           {/* Reactions button */}
@@ -539,8 +620,8 @@ export default function MeetingPage() {
               onClick={() => { setShowReactions(!showReactions); setShowSecurity(false); }}
               className={`flex flex-col items-center gap-1 group transition ${showReactions ? 'text-[#0B5CFF]' : 'text-white/80 hover:text-white'}`}
             >
-              <ZoomReactionIcon size={22} />
-              <span className="text-[11px]">Reactions</span>
+              <ZoomReactionIcon size={20} />
+              <span className="text-[10px] sm:text-[11px] hidden sm:inline">Reactions</span>
             </button>
             {showReactions && (
               <div className="absolute bottom-[64px] left-1/2 -translate-x-1/2 bg-[#1C1C1E] border border-white/10 rounded-full p-2.5 shadow-2xl z-30 flex items-center gap-3">
@@ -548,7 +629,7 @@ export default function MeetingPage() {
                   <button
                     key={emoji}
                     onClick={() => triggerReaction(emoji)}
-                    className="hover:scale-135 active:scale-95 text-[22px] transition duration-150 cursor-pointer"
+                    className="hover:scale-135 active:scale-95 text-[20px] sm:text-[22px] transition duration-150 cursor-pointer"
                   >
                     {emoji}
                   </button>
@@ -562,18 +643,18 @@ export default function MeetingPage() {
             onClick={() => { setActivePanel(activePanel === 'ai' ? 'none' : 'ai'); setShowSecurity(false); setShowReactions(false); }}
             className={`flex flex-col items-center gap-1 group transition ${activePanel === 'ai' ? 'text-indigo-400' : 'text-white/80 hover:text-white'}`}
           >
-            <div className="w-[22px] h-[22px] rounded-full border border-indigo-400/50 flex items-center justify-center text-[10px] font-bold text-indigo-400 group-hover:bg-indigo-400/10">
+            <div className="w-[20px] h-[20px] rounded-full border border-indigo-400/50 flex items-center justify-center text-[9px] font-bold text-indigo-400 group-hover:bg-indigo-400/10">
               AI
             </div>
-            <span className="text-[11px]">AI Companion</span>
+            <span className="text-[10px] sm:text-[11px] hidden sm:inline">AI Companion</span>
           </button>
         </div>
 
         {/* Right: End Meeting */}
         <div>
           <button onClick={() => setShowEndModal(true)} className="flex flex-col items-center gap-1 group">
-            <ZoomEndIcon size={24} />
-            <span className="text-[11px] text-[#FF2D55] font-semibold group-hover:text-red-400 transition">End</span>
+            <ZoomEndIcon size={22} />
+            <span className="text-[10px] sm:text-[11px] text-[#FF2D55] font-semibold group-hover:text-red-400 transition hidden sm:inline">End</span>
           </button>
         </div>
       </div>

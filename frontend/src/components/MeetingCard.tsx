@@ -84,7 +84,7 @@ export default function MeetingCard() {
   const isToday = selectedDate.toDateString() === new Date().toDateString()
 
   return (
-    <div className="mt-[36px] w-[580px] max-w-[92%] border border-[#E5E7EB] rounded-[12px] overflow-hidden bg-white shadow-sm">
+    <div className="mt-[28px] w-[580px] max-w-[92%] flex-1 flex flex-col border-x border-t border-[#EDEEF1] rounded-t-[12px] bg-white shadow-[0_-4px_16px_rgba(0,0,0,0.02)] overflow-hidden">
       {/* Info banner - inside card with margin */}
       <div className="m-[12px] bg-[#F0F6FF] border border-[#BFD3FF] rounded-[8px] p-[10px_12px] flex gap-2 items-start">
         <div className="w-4 h-4 rounded-full border border-[#0B5CFF] text-[#0B5CFF] flex items-center justify-center text-[10px] shrink-0 mt-0.5 font-serif font-bold">i</div>
@@ -232,7 +232,7 @@ export default function MeetingCard() {
 
       {/* Meetings List / Empty State */}
       {filtered.length === 0 ? (
-        <div className="py-[64px] flex flex-col items-center">
+        <div className="flex-1 flex flex-col items-center justify-center py-[48px]">
           <svg width="120" height="90" viewBox="0 0 120 90" className="mb-4">
             <ellipse cx="60" cy="78" rx="32" ry="8" fill="#EEF0FF"/>
             <path d="M60 15 L10 35 L60 45 Z" fill="#C7D2FE"/>
@@ -243,7 +243,7 @@ export default function MeetingCard() {
           <p className="text-[13px] text-[#6B7280] font-medium">No meetings scheduled.</p>
         </div>
       ) : (
-        <div className="divide-y divide-[#EDEEF1]">
+        <div className="flex-1 divide-y divide-[#EDEEF1] overflow-y-auto">
           {filtered.map((m: any) => (
             <div key={m.id} className="p-4 flex items-center justify-between hover:bg-gray-50 transition">
               <div>
@@ -276,7 +276,7 @@ export default function MeetingCard() {
       )}
 
       {/* Open recordings */}
-      <div className="h-[40px] border-t border-[#EDEEF1] px-3 flex items-center text-[12px] text-[#5F6368] hover:bg-[#F9FAFB] cursor-pointer font-medium">
+      <div className="h-[40px] border-t border-[#EDEEF1] px-3 flex items-center text-[12px] text-[#5F6368] hover:bg-[#F9FAFB] cursor-pointer font-medium shrink-0 mt-auto">
         Open recordings
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="ml-1"><path d="M5 3L9 7L5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
       </div>
