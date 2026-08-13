@@ -11,11 +11,12 @@ load_dotenv()
 Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Zoom Clone Backend")
 
-frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+raw_frontend_urls = os.getenv("FRONTEND_URL", "http://localhost:3000")
+allowed_origins = [url.strip().rstrip('/') for url in raw_frontend_urls.split(",")]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[frontend_url],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
