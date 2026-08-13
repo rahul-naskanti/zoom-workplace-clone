@@ -85,9 +85,9 @@ export default function ZoomHome() {
           </div>
 
           {/* Action buttons: New meeting, Join, Schedule */}
-          <div className="flex gap-[24px] sm:gap-[48px] mt-[24px] sm:mt-[28px]">
+          <div className="flex gap-[12px] sm:gap-[20px] mt-[24px] sm:mt-[28px] justify-center items-start">
             {/* New Meeting — orange bg, white filled camera + slash */}
-            <button onClick={handleNewMeeting} className="flex flex-col items-center gap-2 group">
+            <button onClick={handleNewMeeting} className="w-[76px] sm:w-[84px] flex flex-col items-center gap-2 group text-center shrink-0">
               <div className="w-[48px] h-[48px] bg-[#FF742E] hover:bg-[#E56320] active:scale-95 rounded-[14px] flex items-center justify-center transition">
                 <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
                   {/* Camera body - filled white rounded rect */}
@@ -99,14 +99,14 @@ export default function ZoomHome() {
                   <line x1="3" y1="28" x2="29" y2="4" stroke="white" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
               </div>
-              <span className="text-[12px] text-[#5F6368] font-normal flex items-center gap-1">
+              <span className="text-[12px] text-[#5F6368] font-normal flex items-center justify-center gap-1 w-full whitespace-nowrap">
                 New meeting
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="#5F6368" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <svg width="10" height="10" viewBox="0 0 12 12" fill="none" className="shrink-0"><path d="M3 4.5L6 7.5L9 4.5" stroke="#5F6368" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </span>
             </button>
 
             {/* Join — blue bg, filled white rounded square + blue + inside */}
-            <button onClick={() => setShowJoin(true)} className="flex flex-col items-center gap-2 group">
+            <button onClick={() => setShowJoin(true)} className="w-[76px] sm:w-[84px] flex flex-col items-center gap-2 group text-center shrink-0">
               <div className="w-[48px] h-[48px] bg-[#0B5CFF] hover:bg-[#004BE0] active:scale-95 rounded-[14px] flex items-center justify-center transition">
                 <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
                   {/* Filled white rounded square */}
@@ -116,11 +116,11 @@ export default function ZoomHome() {
                   <line x1="11" y1="16" x2="21" y2="16" stroke="#0B5CFF" strokeWidth="2.5" strokeLinecap="round"/>
                 </svg>
               </div>
-              <span className="text-[12px] text-[#5F6368] font-normal">Join</span>
+              <span className="text-[12px] text-[#5F6368] font-normal w-full whitespace-nowrap">Join</span>
             </button>
 
             {/* Schedule — blue bg, filled white calendar + blue "19" */}
-            <button onClick={() => router.push('/schedule')} className="flex flex-col items-center gap-2 group">
+            <button onClick={() => router.push('/schedule')} className="w-[76px] sm:w-[84px] flex flex-col items-center gap-2 group text-center shrink-0">
               <div className="w-[48px] h-[48px] bg-[#0B5CFF] hover:bg-[#004BE0] active:scale-95 rounded-[14px] flex items-center justify-center transition">
                 <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
                   {/* Calendar body - filled white */}
@@ -134,7 +134,7 @@ export default function ZoomHome() {
                   <text x="16" y="23.5" textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight="800" fontSize="10" fill="#0B5CFF">19</text>
                 </svg>
               </div>
-              <span className="text-[12px] text-[#5F6368] font-normal">Schedule</span>
+              <span className="text-[12px] text-[#5F6368] font-normal w-full whitespace-nowrap">Schedule</span>
             </button>
           </div>
 
