@@ -25,7 +25,6 @@ A full-stack clone of the **Zoom Workplace** desktop application built as an SDE
 | **Frontend** | Next.js 16.3 (App Router), React 19, TypeScript, Tailwind CSS v4 |
 | **Backend** | FastAPI, SQLAlchemy, Pydantic |
 | **Database** | SQLite (`zoom_clone.db`) |
-| **Media** | WebRTC (`getUserMedia`, `getDisplayMedia`) |
 | **Icons** | Custom SVG components extracted from Zoom's real UI |
 
 ---
