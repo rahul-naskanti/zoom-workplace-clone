@@ -40,7 +40,7 @@ A full-stack clone of the **Zoom Workplace** desktop application built as an SDE
 ## 📁 Folder Structure
 
 ```
-scaler final/
+scalerfinal/
 ├── frontend/                    # Next.js application
 │   ├── src/
 │   │   ├── app/
