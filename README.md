@@ -12,14 +12,7 @@ A full-stack clone of the **Zoom Workplace** desktop application built as an SDE
 | **Video Meeting Room** | Live webcam, mic toggle, screen sharing, name tags |
 | **Schedule Meeting** | Full Zoom-style form with date picker, 15-min time increments, passcode, encryption options |
 | **Join Meeting** | Modal + dedicated page with meeting code validation (backend + regex fallback) |
-| **Meeting Chat** | In-meeting chat panel with real-time message display |
-| **AI Companion** | Simulated AI panel with summarization, action items, and decision prompts |
-| **Participants Panel** | Live participant list with mic/cam status indicators |
-| **Reactions** | Floating emoji reactions (👍 ❤️ 👏 😂 😮 🎉) with CSS animations |
-| **Screen Sharing** | Native `getDisplayMedia` screen share with live preview |
-| **Security Panel** | Host controls: lock meeting, waiting room, share/chat/rename permissions |
 | **Date Navigation** | Today/prev/next day buttons with client-side meeting filtering |
-| **Filter Dropdown** | "Hosted by you", "With cloud recordings", "With meeting summary", Refresh |
 | **Copy Invite Link** | One-click clipboard copy of meeting URL |
 | **Upcoming Meetings** | Fetched from SQLite via FastAPI, shown on home page with Join button |
 
