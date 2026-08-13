@@ -23,13 +23,36 @@ export default function JoinModal({ open, onClose }: { open: boolean; onClose: (
 
   if (!open) return null
 
+  // Extract meeting ID from a full meeting URL
+  const extractMeetingId = (input: string): string => {
+    let clean = input.trim()
+    if (clean.includes('/meeting/')) {
+      const parts = clean.split('/meeting/')
+      clean = parts[parts.length - 1].split('?')[0]
+    } else if (clean.includes('/j/')) {
+      const parts = clean.split('/j/')
+      clean = parts[parts.length - 1].split('?')[0]
+    }
+    return clean
+  }
+
+  // Format 10 digit raw strings to XXX-XXX-XXXX format
+  const normaliseCode = (code: string): string => {
+    let raw = code.replace(/[^a-zA-Z0-9]/g, '')
+    if (raw.length === 10 && /^\d+$/.test(raw)) {
+      return `${raw.slice(0, 3)}-${raw.slice(3, 6)}-${raw.slice(6)}`
+    }
+    return code
+  }
+
   const handleJoin = async () => {
     if (!meetingId.trim()) return alert("Enter Meeting ID")
     if (!name.trim()) return alert("Enter your name")
 
-    const isValid = await validateMeeting(meetingId)
+    const parsedId = normaliseCode(extractMeetingId(meetingId))
+    const isValid = await validateMeeting(parsedId)
     if (isValid !== true) {
-      return alert(`Meeting ${meetingId} not found`)
+      return alert(`Meeting ${parsedId} not found`)
     }
 
     // Save configurations to localStorage
@@ -46,7 +69,7 @@ export default function JoinModal({ open, onClose }: { open: boolean; onClose: (
     onClose()
     
     // Navigate to meeting room
-    router.push(`/meeting/${meetingId.trim()}?name=${name.trim()}`)
+    router.push(`/meeting/${parsedId}?name=${name.trim()}`)
   }
 
   return (

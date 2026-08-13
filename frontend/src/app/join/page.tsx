@@ -10,12 +10,33 @@ function JoinForm() {
   const [mid, setMid] = useState(preId)
   const [name, setName] = useState('')
 
+  const extractMeetingId = (input: string): string => {
+    let clean = input.trim()
+    if (clean.includes('/meeting/')) {
+      const parts = clean.split('/meeting/')
+      clean = parts[parts.length - 1].split('?')[0]
+    } else if (clean.includes('/j/')) {
+      const parts = clean.split('/j/')
+      clean = parts[parts.length - 1].split('?')[0]
+    }
+    return clean
+  }
+
+  const normaliseCode = (code: string): string => {
+    let raw = code.replace(/[^a-zA-Z0-9]/g, '')
+    if (raw.length === 10 && /^\d+$/.test(raw)) {
+      return `${raw.slice(0, 3)}-${raw.slice(3, 6)}-${raw.slice(6)}`
+    }
+    return code
+  }
+
   const handleJoin = async () => {
     if (!mid || !name) return alert('Enter Meeting ID and Name')
-    const valid = await api.validateMeeting(mid)
+    const parsedId = normaliseCode(extractMeetingId(mid))
+    const valid = await api.validateMeeting(parsedId)
     if (valid !== true) return alert('Meeting not found - check format 933-3155-2203')
     localStorage.setItem('displayName', name)
-    router.push(`/meeting/${mid.trim()}`)
+    router.push(`/meeting/${parsedId}`)
   }
 
   return (
