@@ -91,7 +91,8 @@ export default function MeetingsPage() {
   const activeCode = selectedId === 'pmi' ? pmi : (selectedMeeting?.meeting_code || '')
   const activePasscode = selectedId === 'pmi' ? pmiPasscode : (selectedMeeting?.passcode || '')
 
-  const invite = `Naskanti Rahul is inviting you to a scheduled Zoom meeting.\n\nTopic: ${activeName}\nJoin Zoom Meeting\nhttp://localhost:3000/meeting/${activeCode.replaceAll(' ', '')}\n\nMeeting ID: ${activeCode}\nPasscode: ${activePasscode}`
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'
+  const invite = `Naskanti Rahul is inviting you to a scheduled Zoom meeting.\n\nTopic: ${activeName}\nJoin Zoom Meeting\n${origin}/meeting/${activeCode.replaceAll(' ', '')}\n\nMeeting ID: ${activeCode}\nPasscode: ${activePasscode}`
 
   const handleStart = () => {
     const code = activeCode.replaceAll(' ', '-')

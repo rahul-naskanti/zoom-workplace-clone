@@ -8,11 +8,14 @@ from ..schemas.meeting import ScheduleMeetingIn, InstantMeetingIn
 
 router = APIRouter()
 
+import os
+
 def gen_code():
     return f"{random.randint(100,999)}-{random.randint(1000,9999)}-{random.randint(1000,9999)}"
 
 def gen_link(code):
-    return f"http://localhost:3000/meeting/{code}"
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+    return f"{frontend_url}/meeting/{code}"
 
 # FEATURE 2: Instant Meeting Creation
 @router.post("/instant")

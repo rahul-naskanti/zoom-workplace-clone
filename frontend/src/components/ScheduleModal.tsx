@@ -56,13 +56,13 @@ export default function ScheduleModal({ open, onClose }: { open: boolean; onClos
               <p><span className="text-[#6B7280]">Time:</span> {time || 'Not set'}</p>
               <p><span className="text-[#6B7280]">Meeting ID:</span> {meetingId}</p>
               <p className="text-xs bg-[#F3F4F6] p-2.5 rounded-lg font-mono break-all">
-                http://localhost:3000/meeting/{meetingId}
+                {typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'}/meeting/{meetingId}
               </p>
             </div>
             <div className="flex gap-2 mt-5">
               <button onClick={handleClose} className="flex-1 h-9 border rounded-full text-[13px]">Close</button>
               <button
-                onClick={() => { handleClose(); navigator.clipboard.writeText(`http://localhost:3000/meeting/${meetingId}`) }}
+                onClick={() => { handleClose(); navigator.clipboard.writeText(`${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'}/meeting/${meetingId}`) }}
                 className="flex-1 h-9 bg-[#0B5CFF] text-white rounded-full text-[13px] font-semibold"
               >Copy Invite Link</button>
             </div>

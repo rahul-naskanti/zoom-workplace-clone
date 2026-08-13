@@ -1,5 +1,10 @@
-const API = "http://127.0.0.1:8000/api/meetings"
-const AUTH_API = "http://127.0.0.1:8000/api/auth"
+const getBaseUrl = (): string => {
+  return process.env.NEXT_PUBLIC_API_URL as string
+}
+
+const BASE_URL = getBaseUrl()
+const API = `${BASE_URL}/api/meetings`
+const AUTH_API = `${BASE_URL}/api/auth`
 
 export const signupApi = async (username: string, email: string, password: string) => {
   const res = await fetch(`${AUTH_API}/signup`, {
@@ -59,7 +64,7 @@ export const validateMeeting = async (code: string): Promise<boolean> => {
   const trimmed = code.trim()
   if (!trimmed) return false
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/meetings/validate/${trimmed}`)
+    const res = await fetch(`${API}/validate/${trimmed}`)
     if (res.ok) {
       const data = await res.json()
       if (data.valid === true) return true

@@ -395,7 +395,8 @@ export default function MeetingPage() {
 
           <button
             onClick={() => {
-              navigator.clipboard.writeText(`http://localhost:3000/meeting/${id}`);
+              const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
+              navigator.clipboard.writeText(`${origin}/meeting/${id}`);
               alert("Invite link copied!");
             }}
             className="absolute bottom-4 right-4 bg-white/10 hover:bg-white/20 text-white text-[12px] px-3 py-1.5 rounded-[4px] backdrop-blur-sm transition border border-white/10 z-10"
